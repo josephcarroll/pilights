@@ -16,6 +16,7 @@ class Pilights:
         self.width = width
         self.height = height
         self.render_target = render_target
+        self.changed = True
 
         self.rendering = False
         self.ledStrip = LedStrip_WS2801(width * height)
@@ -48,25 +49,29 @@ class Pilights:
             if self.rendering:
                 self.render_target.render(self)
 
-            for i in range(0, self.width):
-                for j in range(0, self.height):
-                    wanted_pixel = self.wanted_grid[i][j]
-                    current_pixel = self.current_grid[i][j]
-                    self.current_grid[i][j] = self.mix_color(current_pixel, wanted_pixel)
+            if self.changed:
+                for i in range(0, self.width):
+                    for j in range(0, self.height):
+                        wanted_pixel = self.wanted_grid[i][j]
+                        current_pixel = self.current_grid[i][j]
+                        self.current_grid[i][j] = self.mix_color(current_pixel, wanted_pixel)
 
-            counter = 0
-            for i in range(0, self.width):
-                for j in range(0, self.height):
-                    modded_j = (self.height - 1 - j) if (i % 2 == 1) else j
-                    self.ledStrip.setPixel(counter, self.current_grid[modded_j][i])
-                    counter += 1
-            self.ledStrip.update()
+                counter = 0
+                for i in range(0, self.width):
+                    for j in range(0, self.height):
+                        modded_j = (self.height - 1 - j) if (i % 2 == 1) else j
+                        self.ledStrip.setPixel(counter, self.current_grid[modded_j][i])
+                        counter += 1
+                self.ledStrip.update()
             time.sleep(0.01)
+            self.changed = False
 
     def set(self, i, j, colour):
+        self.changed = True
         self.wanted_grid[j][i] = colour
 
     def fill(self, colour):
+        self.changed = True
         for i in range(0, self.width):
             for j in range(0, self.height):
                 self.wanted_grid[j][i] = colour
