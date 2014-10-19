@@ -54,7 +54,7 @@ class Snake:
             pilights.clear()
 
         # Food
-        food_colour = tuple(int(i * 255) for i in hsv_to_rgb(self.food_hue, 1, 1))
+        food_colour = tuple(int(i * 255) for i in hsv_to_rgb(self.food_hue, 1, 0.5))
         self.food_hue += 0.005
         pilights.set(self.food.x, self.food.y, food_colour)
 
