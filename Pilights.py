@@ -81,18 +81,18 @@ class Pilights:
 
 class TestPattern:
     def __init__(self):
-        self.colour = [0, 0, 0]
+        self.colour = Pilights.black
 
     def test(self):
         def fill_and_sleep(colour, sleep_time=0.3):
             self.colour = colour
             time.sleep(sleep_time)
 
-        fill_and_sleep([255, 0, 0])
-        fill_and_sleep([0, 255, 0])
-        fill_and_sleep([0, 0, 255])
-        fill_and_sleep([255, 255, 255])
-        fill_and_sleep([0, 0, 0], 1)
+        fill_and_sleep(Pilights.red)
+        fill_and_sleep(Pilights.green)
+        fill_and_sleep(Pilights.blue)
+        fill_and_sleep(Pilights.white)
+        fill_and_sleep(Pilights.black)
 
     def render(self, pilights):
         pilights.fill(self.colour)
