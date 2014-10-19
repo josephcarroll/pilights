@@ -62,7 +62,7 @@ class AIPlayer:
                 return self.path_from(came_from, goal)
             open_set.remove(current)
             closed_set.add(current)
-            for neighbour in self.neighbours_of(current, game):
+            for neighbour in self.neighbours_of(start, current, goal, game):
                 if neighbour in closed_set:
                     continue
                 tentative_g_score = g_score[current] + 1  # All neighbours are 1 unit away!
@@ -70,11 +70,12 @@ class AIPlayer:
                     came_from[neighbour] = current
                     g_score[neighbour] = tentative_g_score
                     f_score[neighbour] = g_score[neighbour] + self.heuristic_cost_estimate(neighbour, goal)
-                if neighbour not in open_set:
-                    open_set.add(neighbour)
+                    if neighbour not in open_set:
+                        open_set.add(neighbour)
         return []
 
-    def neighbours_of(self, current, game):
+    def neighbours_of(self, start, current, goal, game):
+        moves_in = (abs(goal.x - start.x) + abs(goal.y - start.y)) - (abs(goal.x - current.x) + abs(goal.y - current.y))
         possible_neighbours = [
             current._replace(x=current.x - 1),
             current._replace(x=current.x + 1),
@@ -82,7 +83,8 @@ class AIPlayer:
             current._replace(y=current.y + 1),
         ]
         possible_neighbours = [n for n in possible_neighbours if not (n.x < 0 or n.y < 0 or n.x >= game.width or n.y >= game.height)]
-        return [n for n in possible_neighbours if n not in game.snake]
+        # We ignore the first n because we know they will disappear!
+        return [n for n in possible_neighbours if n not in game.snake[-moves_in:]]
 
     def path_from(self, came_from, goal):
         current_node = goal
