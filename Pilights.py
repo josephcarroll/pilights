@@ -15,10 +15,8 @@ class Pilights:
     def __init__(self, width, height, render_target):
         self.width = width
         self.height = height
-        self.render_target = render_target
         self.changed = True
 
-        self.rendering = False
         self.ledStrip = LedStrip_WS2801(width * height)
         self.mix_speed = 40
         self.current_grid = [[self.black] * width for x in xrange(height)]
@@ -28,8 +26,10 @@ class Pilights:
         pi_thread.daemon = True
         pi_thread.start()
 
-        self.run_test_pattern()
-        self.rendering = True
+        test_patten = TestPattern()
+        self.render_target = test_patten
+        test_patten.test()  # Blocks whilst it changes colours
+        self.render_target = render_target
 
     def mix_color(self, from_colour, to_colour):
         r = self.mix_int(from_colour[0], to_colour[0])
@@ -46,8 +46,7 @@ class Pilights:
 
     def render_loop(self):
         while True:
-            if self.rendering:
-                self.render_target.render(self)
+            self.render_target.render(self)
 
             if self.changed:
                 for i in range(0, self.width):
@@ -79,13 +78,21 @@ class Pilights:
     def clear(self):
         self.fill(self.black)
 
-    def run_test_pattern(self):
-        def fill_update_sleep(color, sleep_time=0.3):
-            self.fill(color)
+
+class TestPattern:
+    def __init__(self):
+        self.colour = [0, 0, 0]
+
+    def test(self):
+        def fill_and_sleep(colour, sleep_time=0.3):
+            self.colour = colour
             time.sleep(sleep_time)
 
-        fill_update_sleep([255, 0, 0])
-        fill_update_sleep([0, 255, 0])
-        fill_update_sleep([0, 0, 255])
-        fill_update_sleep([255, 255, 255])
-        fill_update_sleep([0, 0, 0], 1)
+        fill_and_sleep([255, 0, 0])
+        fill_and_sleep([0, 255, 0])
+        fill_and_sleep([0, 0, 255])
+        fill_and_sleep([255, 255, 255])
+        fill_and_sleep([0, 0, 0], 1)
+
+    def render(self, pilights):
+        pilights.fill(self.colour)
