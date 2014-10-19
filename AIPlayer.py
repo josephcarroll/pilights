@@ -5,7 +5,8 @@ from Snake import Direction, State
 
 class AIPlayer:
     def __init__(self):
-        pass
+        self.known_food_location = None
+        self.optimal_path = []
 
     def take_turn(self, game):
         """
@@ -17,14 +18,18 @@ class AIPlayer:
             game.start()
             return
 
-        time1 = time.time()
-        optimal_path = self.search_for_move(game)
-        time2 = time.time()
-        print "Path creation took {}ms".format((time2-time1)*1000.0)
+        if self.known_food_location is None or self.known_food_location != game.food:
+            self.known_food_location = game.food
+            time1 = time.time()
+            self.optimal_path = self.search_for_move(game)[1:]  # We exclude the first entry as that's our location!
+            time2 = time.time()
+            print "Path creation took {}ms".format((time2-time1)*1000.0)
+
         current_head = game.snake[-1]
 
-        if len(optimal_path) > 1:
-            path_head = optimal_path[1]
+        if len(self.optimal_path) > 0:
+            path_head = self.optimal_path[0]
+            self.optimal_path = self.optimal_path[1:]
 
             cx = current_head.x
             cy = current_head.y
@@ -39,9 +44,8 @@ class AIPlayer:
                 game.change_direction(Direction.up)
             elif ty > cy and tx == cx:
                 game.change_direction(Direction.down)
-
         else:
-            print 'No path found! Gonna die :O'
+            print 'No path found! Gonna die!'
 
     def search_for_move(self, game):
         start = game.snake[-1]
@@ -82,7 +86,7 @@ class AIPlayer:
             current._replace(y=current.y - 1),
             current._replace(y=current.y + 1),
         ]
-        return [n for n in possible_neighbours if not n in snake]
+        return [n for n in possible_neighbours if n not in snake]
 
     def path_from(self, came_from, goal):
         current_node = goal
