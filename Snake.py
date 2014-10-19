@@ -48,7 +48,7 @@ class Snake:
 
     def render(self, pilights):
         if self.level_up:
-            pilights.fill(pilights.white)
+            pilights.fill([0, 0, 100])
         else:
             pilights.clear()
 
@@ -61,7 +61,7 @@ class Snake:
         body_colour = pilights.green if self.state == State.playing else pilights.red
         brightness = 0.4
         actual_colour = tuple(int(i * brightness) for i in body_colour)
-        for position in self.snake[:-1]:
+        for position in self.snake:
             pilights.set(position.x, position.y, actual_colour)
 
         # Snake head
