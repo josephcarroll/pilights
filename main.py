@@ -2,8 +2,7 @@
 
 import threading
 from Pilights import Pilights
-from Snake import Snake, Direction
-import curses
+from Snake import Snake
 from ConsolePlayer import *
 
 if __name__ == '__main__':
