@@ -79,13 +79,13 @@ class Snake:
         time.sleep(max(0.07, 0.1 - sleep_factor))
 
     def update(self):
+        if self.state == State.game_over:
+            return
+
         self.player.take_turn(self)
 
         # If we level up in the previous update, we reset here!
         self.level_up = False
-
-        if self.state == State.game_over:
-            return
 
         if self.new_direction != self.direction_opposites[self.direction]:
             self.direction = self.new_direction
@@ -105,29 +105,25 @@ class Snake:
         head_position = self.snake[-1]
         new_position = Position(head_position.x + x_change, head_position.y + y_change)
 
-        if new_position.x < 0:
-            new_position = new_position._replace(x=self.width - 1)
-        if new_position.y < 0:
-            new_position = new_position._replace(y=self.height - 1)
-        if new_position.x >= self.width:
-            new_position = new_position._replace(x=0)
-        if new_position.y >= self.height:
-            new_position = new_position._replace(y=0)
+        if new_position.x < 0 or new_position.y < 0 or new_position.x >= self.width or new_position.y >= self.height:
+            self.state = State.game_over
+            return
 
         if new_position in self.snake[:-1]:  # Note that we exclude the tail from this check as it will disappear!
             self.state = State.game_over
             self.snake.append(new_position)  # So the player can see where the head is when dead
-        else:
-            self.snake.append(new_position)
-            if new_position == self.food:
-                new_food = self.random_position()
-                while new_food in self.snake:
-                    new_food = self.random_position()
-                self.food = new_food
-                self.eaten += 1
-                if self.eaten % 10 == 0:
-                    self.level += 1
-                    self.level_up = True
+            return
 
-            else:
-                self.snake.pop(0)
+        self.snake.append(new_position)
+        if new_position == self.food:
+            new_food = self.random_position()
+            while new_food in self.snake:
+                new_food = self.random_position()
+            self.food = new_food
+            self.eaten += 1
+            if self.eaten % 10 == 0:
+                self.level += 1
+                self.level_up = True
+
+        else:
+            self.snake.pop(0)

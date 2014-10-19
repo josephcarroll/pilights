@@ -67,7 +67,7 @@ class AIPlayer:
                 return self.path_from(came_from, goal)
             open_set.remove(current)
             closed_set.add(current)
-            for neighbour in self.neighbours_of(current, game.snake):
+            for neighbour in self.neighbours_of(current, game):
                 if neighbour in closed_set:
                     continue
                 tentative_g_score = g_score[current] + 1  # All neighbours are 1 unit away!
@@ -79,14 +79,15 @@ class AIPlayer:
                     open_set.add(neighbour)
         return []
 
-    def neighbours_of(self, current, snake):
+    def neighbours_of(self, current, game):
         possible_neighbours = [
             current._replace(x=current.x - 1),
             current._replace(x=current.x + 1),
             current._replace(y=current.y - 1),
             current._replace(y=current.y + 1),
         ]
-        return [n for n in possible_neighbours if n not in snake]
+        possible_neighbours = [n for n in possible_neighbours if not (n.x < 0 or n.y < 0 or n.x >= game.width or n.y >= game.height)]
+        return [n for n in possible_neighbours if n not in game.snake]
 
     def path_from(self, came_from, goal):
         current_node = goal
