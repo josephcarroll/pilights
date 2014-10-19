@@ -27,9 +27,10 @@ class Snake:
         Direction.right: Direction.left
     }
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, player):
         self.width = width
         self.height = height
+        self.player = player
 
         self.state = State.playing
         self.eaten = 0
@@ -43,7 +44,7 @@ class Snake:
 
     def start(self):
         if self.state != State.playing:
-            self.__init__(self.width, self.height)
+            self.__init__(self.width, self.height, self.player)
 
     def render(self, pilights):
         if self.level_up:
@@ -78,6 +79,8 @@ class Snake:
         time.sleep(max(0.07, 0.2 - sleep_factor))
 
     def update(self):
+        self.player.take_turn(self)
+
         # If we level up in the previous update, we reset here!
         self.level_up = False
 
