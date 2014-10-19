@@ -32,7 +32,7 @@ class Snake:
         self.height = height
         self.player = player
 
-        self.state = State.playing
+        self.state = State.game_over
         self.eaten = 0
         self.level = 0
         self.level_up = False
@@ -45,6 +45,7 @@ class Snake:
     def start(self):
         if self.state != State.playing:
             self.__init__(self.width, self.height, self.player)
+            self.state = State.playing
 
     def render(self, pilights):
         if self.level_up:
@@ -79,10 +80,10 @@ class Snake:
         time.sleep(max(0.07, 0.2 - sleep_factor))
 
     def update(self):
+        self.player.take_turn(self)
+
         if self.state == State.game_over:
             return
-
-        self.player.take_turn(self)
 
         # If we level up in the previous update, we reset here!
         self.level_up = False

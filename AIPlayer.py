@@ -16,7 +16,6 @@ class AIPlayer:
         # We always restart the game if dead!
         if game.state == State.game_over:
             game.start()
-            return
 
         if self.known_food_location is None or self.known_food_location != game.food:
             self.known_food_location = game.food
