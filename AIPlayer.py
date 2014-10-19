@@ -5,8 +5,7 @@ from Snake import Direction, State
 
 class AIPlayer:
     def __init__(self):
-        self.known_food_location = None
-        self.optimal_path = []
+        pass
 
     def take_turn(self, game):
         """
@@ -17,18 +16,15 @@ class AIPlayer:
         if game.state == State.game_over:
             game.start()
 
-        if self.known_food_location is None or self.known_food_location != game.food:
-            self.known_food_location = game.food
-            time1 = time.time()
-            self.optimal_path = self.search_for_move(game)[1:]  # We exclude the first entry as that's our location!
-            time2 = time.time()
-            print "Path creation took {}ms".format((time2-time1)*1000.0)
+        time1 = time.time()
+        optimal_path = self.search_for_move(game)[1:]  # We exclude the first entry as that's our location!
+        time2 = time.time()
+        print "Path creation took {}ms".format((time2-time1)*1000.0)
 
         current_head = game.snake[-1]
 
-        if len(self.optimal_path) > 0:
-            path_head = self.optimal_path[0]
-            self.optimal_path = self.optimal_path[1:]
+        if len(optimal_path) > 0:
+            path_head = optimal_path[0]
 
             cx = current_head.x
             cy = current_head.y
