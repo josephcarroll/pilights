@@ -4,6 +4,7 @@ import threading
 
 
 class Pilights:
+    mix_speed = 10
     black = [0, 0, 0]
     white = [255, 255, 255]
     red = [255, 0, 0]
@@ -18,7 +19,6 @@ class Pilights:
         self.changed = True
 
         self.ledStrip = LedStrip_WS2801(width * height)
-        self.mix_speed = 40
         self.current_grid = [[self.black] * width for x in xrange(height)]
         self.wanted_grid = [[self.black] * width for x in xrange(height)]
 
