@@ -6,9 +6,6 @@ class ConsolePlayer:
     def __init__(self):
         self.last_key = curses.KEY_RIGHT
 
-    def block(self):
-        curses.wrapper(self.main_loop)
-
     def take_turn(self, game):
         if self.last_key == curses.KEY_UP:
             game.change_direction(Direction.up)
@@ -20,6 +17,9 @@ class ConsolePlayer:
             game.change_direction(Direction.right)
         elif self.last_key == 10:
             game.start()
+
+    def block(self):
+        curses.wrapper(self.main_loop)
 
     def main_loop(self, screen):
         win = curses.newwin(20, 60, 0, 0)

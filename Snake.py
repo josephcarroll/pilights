@@ -76,7 +76,7 @@ class Snake:
 
     def sleep(self):
         sleep_factor = self.level * 0.03
-        time.sleep(max(0.07, 0.2 - sleep_factor))
+        time.sleep(max(0.07, 0.1 - sleep_factor))
 
     def update(self):
         self.player.take_turn(self)
