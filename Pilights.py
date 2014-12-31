@@ -4,7 +4,7 @@ import threading
 
 
 class Pilights:
-    mix_speed = 10
+    mix_speed = 20
     black = [0, 0, 0]
     white = [255, 255, 255]
     red = [255, 0, 0]
@@ -92,7 +92,7 @@ class TestPattern:
         fill_and_sleep(Pilights.green)
         fill_and_sleep(Pilights.blue)
         fill_and_sleep(Pilights.white)
-        fill_and_sleep(Pilights.black)
+        fill_and_sleep(Pilights.black, 1.0)
 
     def render(self, pilights):
         pilights.fill(self.colour)
