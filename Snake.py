@@ -59,15 +59,15 @@ class Snake:
         pilights.set(self.food.x, self.food.y, food_colour)
 
         # Snake body
-        body_colour = pilights.green if self.state == State.playing else pilights.red
+        body_colour = pilights.green if len(self.snake) % 2 == 0 else pilights.yellow
         brightness = 0.4
-        actual_colour = tuple(int(i * brightness) for i in body_colour)
         for position in self.snake:
+            actual_colour = tuple(int(i * brightness) for i in body_colour)
+            body_colour = pilights.green if body_colour == pilights.yellow else pilights.yellow
             pilights.set(position.x, position.y, actual_colour)
 
         # Snake head
-        head_colour = tuple(int(i * brightness) for i in pilights.purple)
-        pilights.set(self.snake[-1].x, self.snake[-1].y, head_colour)
+        pilights.set(self.snake[-1].x, self.snake[-1].y, pilights.red)
 
     def change_direction(self, new_direction):
         self.new_direction = new_direction
