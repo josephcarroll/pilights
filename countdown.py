@@ -15,16 +15,16 @@ class CountdownRender:
         self.current = current
         self.target = target
         self.hue = 0
+        self.pixel_count = pilights.width * pilights.height
 
     def render(self, pilights):
-        led_count = 121
         now = datetime.now()
         initial_distance = (self.target - self.current).total_seconds()
         current_distance = (self.target - now).total_seconds()
 
         percent = (initial_distance - current_distance) / initial_distance
         capped_percent = min(percent, 1.0)
-        light_count = int(capped_percent * led_count)
+        light_count = int(capped_percent * self.pixel_count)
 
         colour = tuple(int(i * 255) for i in hsv_to_rgb(self.hue, 1, 0.5))
         self.hue += 0.005
