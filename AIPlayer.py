@@ -19,7 +19,7 @@ class AIPlayer:
         time1 = time.time()
         optimal_path = self.search_for_move(game)[1:]  # We exclude the first entry as that's our location!
         time2 = time.time()
-        print "Path creation took {}ms".format((time2-time1)*1000.0)
+        # print "Path creation took {}ms".format((time2-time1)*1000.0)
 
         current_head = game.snake[-1]
 

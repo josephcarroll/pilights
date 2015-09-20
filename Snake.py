@@ -27,10 +27,11 @@ class Snake:
         Direction.right: Direction.left
     }
 
-    def __init__(self, width, height, player):
+    def __init__(self, width, height, player, grows):
         self.width = width
         self.height = height
         self.player = player
+        self.grows = grows
 
         self.state = State.game_over
         self.eaten = 0
@@ -44,7 +45,7 @@ class Snake:
 
     def start(self):
         if self.state != State.playing:
-            self.__init__(self.width, self.height, self.player)
+            self.__init__(self.width, self.height, self.player, self.grows)
             self.state = State.playing
 
     def render(self, pilights):
@@ -125,6 +126,5 @@ class Snake:
             if self.eaten % 10 == 0:
                 self.level += 1
                 self.level_up = True
-
         else:
             self.snake.pop(0)
